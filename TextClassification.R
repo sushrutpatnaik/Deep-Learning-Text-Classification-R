@@ -95,7 +95,7 @@ partial_x_train <- x_train[-val_indices,]
 y_val <- y_train[val_indices]
 partial_y_train <- y_train[-val_indices]
 
-
+#############################################################################################
 #model 1
 library(keras)
 model <- keras_model_sequential() %>%
@@ -119,5 +119,115 @@ history <- model %>% fit(
 )
 
 results <- model %>% evaluate(x_test, y_test)
+#############################################################################################
+
+
+#model 2
+library(keras)
+model2 <- keras_model_sequential() %>%
+  layer_dense(units = 16, activation = "relu",
+              input_shape = c(10000)) %>%
+  layer_dense(units = 16, activation = "relu") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+model2 %>% compile(optimizer = "rmsprop",loss = "mse", metrics = c("accuracy"))
+
+model2 %>% fit(x_train, y_train, epochs = 10,batch_size = 512)
+
+
+#plot of history based on validation data
+history <- model2 %>% fit(
+  partial_x_train,
+  partial_y_train,
+  epochs = 20,
+  batch_size = 512,
+  validation_data = list(x_val, y_val)
+)
+
+results2 <- model2 %>% evaluate(x_test, y_test)
+#############################################################################################
+
+#model 3
+library(keras)
+model3 <- keras_model_sequential() %>%
+  layer_dense(units = 16, activation = "relu",
+              input_shape = c(10000)) %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+model3 %>% compile(optimizer = "rmsprop",loss = "poisson", metrics = c("accuracy"))
+
+model3 %>% fit(x_train, y_train, epochs = 10,batch_size = 512)
+
+
+
+#plot of history based on validation data
+history <- model3 %>% fit(
+  partial_x_train,
+  partial_y_train,
+  epochs = 20,
+  batch_size = 512,
+  validation_data = list(x_val, y_val)
+)
+
+results3 <- model3 %>% evaluate(x_test, y_test)
+
+#############################################################################################
+
+#model 4
+library(keras)
+model4 <- keras_model_sequential() %>%
+  layer_dense(units = 16, activation = "tanh",
+              input_shape = c(10000)) %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+model4 %>% compile(optimizer = "rmsprop",loss = "poisson", metrics = c("accuracy"))
+
+model4 %>% fit(x_train, y_train, epochs = 10,batch_size = 512)
+
+
+#plot of history based on validation data
+history <- model4 %>% fit(
+  partial_x_train,
+  partial_y_train,
+  epochs = 20,
+  batch_size = 512,
+  validation_data = list(x_val, y_val)
+)
+
+results4 <- model4 %>% evaluate(x_test, y_test)
+#############################################################################################
+
+
+#model 5
+model5 <- keras_model_sequential() %>%
+  layer_dense(units = 16, activation = "relu", input_shape = c(10000)) %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 16, activation = "tanh") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+model5 %>% compile(
+  optimizer = "rmsprop",
+  loss = "poisson",
+  metrics = c("binary_accuracy")
+)
+
+model5 %>% fit(x_train, y_train, epochs = 10,batch_size = 512)
+
+
+#plot of history based on validation data
+history <- model5 %>% fit(
+  partial_x_train,
+  partial_y_train,
+  epochs = 20,
+  batch_size = 512,
+  validation_data = list(x_val, y_val)
+)
+
+results5 <- model5 %>% evaluate(x_test, y_test)
+#############################################################################################
 
 
